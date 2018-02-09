@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import AST exposing (Queries)
-import GraphQL exposing (Location(Local))
+import GraphQL exposing (..)
 import Html exposing (Html, button, div, li, text, ul)
 import Html.Events exposing (onClick)
 import Http

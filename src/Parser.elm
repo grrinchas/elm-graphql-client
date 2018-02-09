@@ -129,7 +129,7 @@ variableDefinition =
     variable
     >>= (\variable -> token ":"
     >>= (\_ -> type_
-    >>= (\type_ -> maybe value
+    >>= (\type_ -> maybe defaultValue
     >>= (\default ->
     succeed (VariableDefinition variable type_ default) <?> "expected variable definition"
     ))))
