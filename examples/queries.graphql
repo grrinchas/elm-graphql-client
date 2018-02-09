@@ -1,0 +1,34 @@
+query allPublications {
+    allPublications {
+        ...publicationInfo
+    }
+}
+
+query user($id: ID!) {
+    User(id: $id) {
+        ...userInfo
+        publications {
+            ...publicationInfo
+        }
+    }
+}
+
+
+fragment publicationInfo on Publication {
+    id
+    title
+    image
+    content
+    owner {
+        ...userInfo
+    }
+}
+
+fragment userInfo on User {
+    id
+    username
+    email
+    picture
+}
+
+
