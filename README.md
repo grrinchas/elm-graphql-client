@@ -6,9 +6,9 @@ elm-package install grrinchas/elm-graphql-client
 
 Parses [GraphqQL](http://facebook.github.io/graphql/October2016/) query document and provides 
 interface to send requests. This allows us to write queries in GraphQL language instead 
-of custom DSLs. 
+of custom DSLs. And share same queries between different platforms. For example, Elm, Android, iOS etc.
 
-For example. Let's say we wish to execute a queries against the following schema
+Let's say we wish to execute a queries against the following schema
 
 ```graphql
 
@@ -85,7 +85,7 @@ initialPayload =
 ```
 
 * `queries` - represents queries document. Because our document is not local, we wrap it in the `GraphQL.remote`.
-* `ednpoint` - represents GraphQL endpoint. **NOTE:** that the library does not support automatic decoding, therefore
+* `endpoint` - represents GraphQL endpoint. **NOTE:** that the library does not support automatic decoding, therefore
 we need to provide custom decoder for each request.
 * `name` - is the name of the query in the document. In our case it can be `allPublications` or `user`. **NOTE:** 
 that shorthand queries are not supported and will be ignored, therefore each query must have a name.
@@ -120,7 +120,7 @@ update msg model =
                 |> GraphQL.withAuthorisation model.token
                 |> GraphQL.send ( RemoteData.fromResult )
                 |> Cmd.map OnFetchedUser
-                |> (\cmd -> (model, cmd))
+                |> (,) model
                 
         -- rest of the code 
 ```

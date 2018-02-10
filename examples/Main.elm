@@ -81,7 +81,7 @@ update msg model =
                 |> GraphQL.withName "allPublications"
                 |> GraphQL.withDecoder publicationsDecoder
                 |> GraphQL.send OnFetchedPublications
-                |> (\cmd -> (model, cmd))
+                |> (,) model
 
         GetUser id ->
             initialPayload
@@ -92,7 +92,7 @@ update msg model =
                 |> GraphQL.withAuthorisation model.token
                 |> GraphQL.send (RemoteData.fromResult )
                 |> Cmd.map OnFetchedUser
-                |> (\cmd -> (model, cmd))
+                |> (,) model
 
         OnFetchedPublications list ->
             let _ = Debug.log "" list in

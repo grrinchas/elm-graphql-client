@@ -101,7 +101,7 @@ type alias Payload dec =
             |> GraphQL.withName "allPublications"
             |> GraphQL.withDecoder publicationsDecoder
             |> GraphQL.send OnFetchedPublications
-            |> (\cmd -> (model, cmd))
+            |> (,) model
 
         OnFetchedPublications result ->
             ...
@@ -264,13 +264,6 @@ withDecoder dec input =
         endpoint -> { input | endpoint = {endpoint | expect = Http.expectJson dec}}
 
 
-{-| Changes list of variables of the `Payload`.
-
--}
-withVariables: List Variable -> Payload dec -> Payload dec
-withVariables var input =  {input | variables = var}
-
-
 {-| Adds `Authorisation` header to the `Payload` endpoint with provided token.
 
 -}
@@ -278,6 +271,27 @@ withAuthorisation: String -> Payload dec -> Payload dec
 withAuthorisation token input =
     {input | endpoint = addHeaders [ Http.header "Authorization" <| "Bearer " ++ token ] input.endpoint }
 
+
+{-| Changes list of variables of the `Payload`. Enum variables can only be encoded as a plain `String`.
+    **Do not** use `toString` function. Following example,
+
+    type Visibility = Public | Private
+
+    visibility: Visibility -> String
+    visibility vis =
+      case vis of
+        Public -> "PUBLIC"
+        Private -> "PRIVATE"
+
+    -- this will work
+    var = variable "visibility" <| visibility Public
+
+    -- this will not work
+    var = variable "visibility" <| toString Public
+
+-}
+withVariables: List Variable -> Payload dec -> Payload dec
+withVariables var input =  {input | variables = var}
 
 
 fetchCustomQueries: Fetch Queries -> (Result Http.Error Queries -> msg) -> Cmd msg
